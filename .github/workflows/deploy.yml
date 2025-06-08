@@ -1,0 +1,51 @@
+name: CI
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install backend deps
+        run: |
+          cd backend
+          pip install black
+          pip install -r requirements.txt
+      - name: Lint backend
+        run: |
+          black --check .
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install frontend deps
+        run: |
+          cd frontend
+          npm install
+      - name: Run frontend lint
+        run: |
+          cd frontend
+          npx eslint . --max-warnings=0
+      - name: Run tests
+        run: echo "No tests yet"
+      - name: Deploy Backend
+        if: github.ref == 'refs/heads/main'
+        uses: renderinc/render-build@v1
+        with:
+          service-id: ${{ secrets.RENDER_SERVICE_ID }}
+          api-key: ${{ secrets.RENDER_API_KEY }}
+      - name: Deploy Frontend
+        if: github.ref == 'refs/heads/main'
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+

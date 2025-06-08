@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Responsive layout adjustments */
+body {
+  @apply min-h-screen bg-gray-100;
+}
+
+#sidebar {
+  @apply w-64 md:block hidden;
+}
+
+@media (max-width: 767px) {
+  #sidebar {
+    @apply hidden;
+  }
+}

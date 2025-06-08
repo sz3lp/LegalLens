@@ -1,0 +1,9 @@
+nginx
+fastapi
+uvicorn
+openai
+python-dotenv
+pdfplumber
+aiofiles
+python-multipart
+stripe
